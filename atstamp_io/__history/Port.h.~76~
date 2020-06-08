@@ -1,0 +1,82 @@
+#ifndef __PORT_H
+#define __PORT_H
+
+#define START_TEST_PIN P1,0
+#define TEST_INFO_PIN P2,0
+
+#define NUMBER_OF_ICS 5
+
+///////////////////////////////////////////////////////////////////////////////
+//IC: 7402
+#define Y1 P0,0
+#define A1 P0,1
+#define B1 P0,2
+#define Y2 P0,3
+#define A2 P0,4
+#define B2 P0,5
+#define GND_02 P0,6
+#define A3 P2,0
+#define B3 P2,1
+#define Y3 P2,2
+#define A4 P2,3
+#define B4 P2,4
+#define Y4 P2,5
+#define VCC_02 P2,6
+//Truth Table
+/*
+	0 0 : 1
+	0 1 : 0
+	1 0 : 0
+	1 1 : 0
+*/
+
+///////////////////////////////////////////////////////////////////////////////
+//IC: 74112
+#define CK1 P0,0
+#define K1 P0,1
+#define J1 P0,2
+#define PR1 P0,3
+#define Q1 P0,4
+#define Q'1 P0,5
+#define Q'2 P0,6
+#define GND_112 P0,7
+#define Q2 P2,0
+#define PR2 P2,1
+#define J2 P2,2
+#define K2 P2,3
+#define CK2 P2,4
+#define CLR2 P2,5
+#define CLR1 P2,6
+#define VCC_112 P2,7
+//Truth Table
+/*
+CLR	 PR  J	K  CK	 Q	 Q
+L 	 H   X 	X  X     L 	 H 		CLEAR
+H 	 L   X 	X  X 	 H 	 L 		PRESET
+L 	 L   X  X  X 	 H 	 H      ---
+H 	 H   L  L  Fall	 Qn  Qn 	NO CHANGE
+H 	 H   H  L  Fall	 H 	 L      ---
+H 	 H   L  H  Fall	 L 	 H      ---
+H 	 H   H  H  Fall	 Qn  Qn 	TOGGLE
+H 	 H   X  X  Rise  Qn  Qn 	NO CHANGE
+*/
+
+///////////////////////////////////////////////////////////////////////////////
+//IC: 74243
+#define IN1 P2,1
+#define IN2 P2,2
+#define OUT1 P1,1
+///////////////////////////////////////////////////////////////////////////////
+//IC: 74684
+#define IN1 P2,1
+#define IN2 P2,2
+#define OUT1 P1,1
+///////////////////////////////////////////////////////////////////////////////
+//IC: 4077
+#define IN1 P2,1
+#define IN2 P2,2
+#define OUT1 P1,1
+///////////////////////////////////////////////////////////////////////////////
+
+#endif
+

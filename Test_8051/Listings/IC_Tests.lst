@@ -1,0 +1,305 @@
+C51 COMPILER V9.60.0.0   IC_TESTS                                                          04/01/2020 00:00:08 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE IC_TESTS
+OBJECT MODULE PLACED IN .\Objects\IC_Tests.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE IC_Tests.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -IC_Tests.lst) TABS(2) OBJECT(.\Objects\IC_Tests.obj)
+
+line level    source
+
+   1          #include <reg51.h>
+   2          #include "IC_DATA.h"
+   3          
+   4          char Test_7402(void){
+   5   1          setb(NOR_VCC_02); clr(NOR_GND_02);
+   6   1        //Test the IC with the 4 possiblities to all gates
+   7   1        clr(NOR_A1); clr(NOR_B1); clr(NOR_A2); clr(NOR_B2); clr(NOR_A3); clr(NOR_B3); clr(NOR_A4); clr(NOR_B4);
+   8   1        if((GetBit(NOR_Y1)&GetBit(NOR_Y2)&GetBit(NOR_Y3)&GetBit(NOR_Y4)) == 0) return 0;
+   9   1        setb(NOR_A1); clr(NOR_B1); setb(NOR_A2); clr(NOR_B2); setb(NOR_A3); clr(NOR_B3); setb(NOR_A4); clr(NOR_B4
+             -);
+  10   1        if((GetBit(NOR_Y1)|GetBit(NOR_Y1)|GetBit(NOR_Y1)|GetBit(NOR_Y1)) == 1) return 0;
+  11   1        clr(NOR_A1); setb(NOR_B1); clr(NOR_A2); setb(NOR_B2); clr(NOR_A3); setb(NOR_B3); clr(NOR_A4); setb(NOR_B4
+             -);
+  12   1        if((GetBit(NOR_Y1)|GetBit(NOR_Y1)|GetBit(NOR_Y1)|GetBit(NOR_Y1)) == 1) return 0;
+  13   1        setb(NOR_A1); setb(NOR_B1); setb(NOR_A2); setb(NOR_B2); setb(NOR_A3); setb(NOR_B3); setb(NOR_A4); setb(NO
+             -R_B4);
+  14   1        if((GetBit(NOR_Y1)|GetBit(NOR_Y1)|GetBit(NOR_Y1)|GetBit(NOR_Y1)) == 1) return 0;
+  15   1      
+  16   1        return 1;
+  17   1      }
+  18          
+  19          
+  20          char Test_74112(void){
+  21   1        setb(FLIP_VCC_112); clr(FLIP_GND_112);
+  22   1        setb(FLIP_Q1); setb(FLIP_Q2); setb(FLIP_Q_1); setb(FLIP_Q_2); //Set as input
+  23   1        clr(FLIP_K1); clr(FLIP_J1); clr(FLIP_K2); clr(FLIP_J2);
+  24   1        setb(FLIP_CK1); setb(FLIP_CK2); setb(FLIP_CLR1); setb(FLIP_CLR2); setb(FLIP_PR1); setb(FLIP_PR2);
+  25   1      
+  26   1        //Check the Clear functionality
+  27   1        //Drive the CLR bits LOW then return them to HIGH
+  28   1        //Then start Testing Q for LOW and Q' for HIGH
+  29   1        clr(FLIP_CLR1); clr(FLIP_CLR2);
+  30   1        setb(FLIP_CLR1); setb(FLIP_CLR2);
+  31   1          //printf("%d,%d,%d,%d\n",GetBit(FLIP_Q1),GetBit(FLIP_Q2),GetBit(FLIP_Q_1),GetBit(FLIP_Q_2));
+  32   1        if((GetBit(FLIP_Q1)!=0)||(GetBit(FLIP_Q2)!=0)||(GetBit(FLIP_Q_1)!=1)||(GetBit(FLIP_Q_2)!=1)) return 0;
+  33   1      
+  34   1        //Check the Preset functionality
+  35   1        //Drive the PR bits LOW then return them to HIGH
+  36   1        //Then start Testing Q for HIGH and Q' for LOW
+  37   1        clr(FLIP_PR1); clr(FLIP_PR2);
+  38   1        setb(FLIP_PR1); setb(FLIP_PR2);
+  39   1        //printf("%d,%d,%d,%d\n",GetBit(FLIP_Q1),GetBit(FLIP_Q2),GetBit(FLIP_Q_1),GetBit(FLIP_Q_2));
+  40   1        if((GetBit(FLIP_Q1)!=1)||(GetBit(FLIP_Q2)!=1)||(GetBit(FLIP_Q_1)!=0)||(GetBit(FLIP_Q_2)!=0)) return 0;
+  41   1      
+  42   1        //Check the Reset functionality
+  43   1        //Drive the K bits HIGH to "Reset" then LOW to "No change"
+  44   1        //Then start Testing Q for LOW and Q' for HIGH
+  45   1        setb(FLIP_K1); setb(FLIP_K2);
+  46   1        clr(FLIP_CK1); clr(FLIP_CK2);
+  47   1        setb(FLIP_CK1); setb(FLIP_CK2);
+  48   1        //printf("%d,%d,%d,%d\n",GetBit(FLIP_Q1),GetBit(FLIP_Q2),GetBit(FLIP_Q_1),GetBit(FLIP_Q_2));
+  49   1        //if((GetBit(FLIP_Q1)!=0)||(GetBit(FLIP_Q2)!=0)||(GetBit(FLIP_Q_1)!=1)||(GetBit(FLIP_Q_2)!=1)) return 0;
+  50   1        clr(FLIP_K1); clr(FLIP_K2);
+  51   1        clr(FLIP_CK1); clr(FLIP_CK2);
+C51 COMPILER V9.60.0.0   IC_TESTS                                                          04/01/2020 00:00:08 PAGE 2   
+
+  52   1        setb(FLIP_CK1); setb(FLIP_CK2);
+  53   1        //printf("%d,%d,%d,%d\n",GetBit(FLIP_Q1),GetBit(FLIP_Q2),GetBit(FLIP_Q_1),GetBit(FLIP_Q_2));
+  54   1        if((GetBit(FLIP_Q1)!=0)||(GetBit(FLIP_Q2)!=0)||(GetBit(FLIP_Q_1)!=1)||(GetBit(FLIP_Q_2)!=1)) return 0;
+  55   1      
+  56   1        //Check the Set functionality
+  57   1        //Drive the J bits HIGH to "Set" then LOW to "No change"
+  58   1        //Then start Testing Q for HIGH and Q' for LOW
+  59   1        setb(FLIP_J1); setb(FLIP_J2);
+  60   1        clr(FLIP_CK1); clr(FLIP_CK2);
+  61   1        setb(FLIP_CK1); setb(FLIP_CK2);
+  62   1        //printf("%d,%d,%d,%d\n",GetBit(FLIP_Q1),GetBit(FLIP_Q2),GetBit(FLIP_Q_1),GetBit(FLIP_Q_2));
+  63   1        if((GetBit(FLIP_Q1)!=1)||(GetBit(FLIP_Q2)!=1)||(GetBit(FLIP_Q_1)!=0)||(GetBit(FLIP_Q_2)!=0)) return 0;
+  64   1        clr(FLIP_J1); clr(FLIP_J2);
+  65   1        clr(FLIP_CK1); clr(FLIP_CK2);
+  66   1        setb(FLIP_CK1); setb(FLIP_CK2);
+  67   1        //printf("%d,%d,%d,%d\n",GetBit(FLIP_Q1),GetBit(FLIP_Q2),GetBit(FLIP_Q_1),GetBit(FLIP_Q_2));
+  68   1        if((GetBit(FLIP_Q1)!=1)||(GetBit(FLIP_Q2)!=1)||(GetBit(FLIP_Q_1)!=0)||(GetBit(FLIP_Q_2)!=0)) return 0;
+  69   1      
+  70   1        //Check the Toggle functionality
+  71   1        //Drive the J and K bits HIGH
+  72   1        //Then start Testing Q for LOW and Q' for HIGH
+  73   1        setb(FLIP_J1); setb(FLIP_J2); setb(FLIP_K1); setb(FLIP_K2);
+  74   1        clr(FLIP_CK1); clr(FLIP_CK2);
+  75   1        setb(FLIP_CK1); setb(FLIP_CK2);
+  76   1        //printf("%d,%d,%d,%d\n",GetBit(FLIP_Q1),GetBit(FLIP_Q2),GetBit(FLIP_Q_1),GetBit(FLIP_Q_2));
+  77   1        if((GetBit(FLIP_Q1)!=0)||(GetBit(FLIP_Q2)!=0)||(GetBit(FLIP_Q_1)!=1)||(GetBit(FLIP_Q_2)!=1)) return 0;
+  78   1      
+  79   1        return 1;
+  80   1      }
+  81          
+  82          //Third case should be revised
+  83          char Test_74243(void){
+  84   1        setb(BUS_VCC_243); clr(BUS_GND_243);
+  85   1      
+  86   1        //Check A to B functionality
+  87   1        //Drive GAB and GBA to LOW
+  88   1        //Then start testing 0101 and 1010 passing from A to B
+  89   1        setb(BUS_B1); setb(BUS_B2); setb(BUS_B3); setb(BUS_B4); //Set as input
+  90   1        setb(BUS_GAB); setb(BUS_GBA);
+  91   1        clr(BUS_A1); setb(BUS_A2); clr(BUS_A3); setb(BUS_A4);
+  92   1        //printf("%d,%d,%d,%d\n",GetBit(BUS_B1),GetBit(BUS_B2),GetBit(BUS_B3),GetBit(BUS_B4));
+  93   1        if((GetBit(BUS_B1)!=0)||(GetBit(BUS_B2)!=1)||(GetBit(BUS_B3)!=0)||(GetBit(BUS_B4)!=1)) return 0;
+  94   1        setb(BUS_A1); clr(BUS_A2); setb(BUS_A3); clr(BUS_A4);
+  95   1        //printf("%d,%d,%d,%d\n",GetBit(BUS_B1),GetBit(BUS_B2),GetBit(BUS_B3),GetBit(BUS_B4));
+  96   1        if((GetBit(BUS_B1)!=1)||(GetBit(BUS_B2)!=0)||(GetBit(BUS_B3)!=1)||(GetBit(BUS_B4)!=0)) return 0;
+  97   1      
+  98   1        //Check B to A functionality
+  99   1        //Drive GAB and GBA to HIGH
+ 100   1        //Then start testing 0101 and 1010 passing from B to A
+ 101   1        setb(BUS_A1); setb(BUS_A2); setb(BUS_A3); setb(BUS_A4); //Set as input
+ 102   1        clr(BUS_GAB); clr(BUS_GBA);
+ 103   1        clr(BUS_B1); setb(BUS_B2); clr(BUS_B3); setb(BUS_B4);
+ 104   1        //printf("%d,%d,%d,%d\n",GetBit(BUS_A1),GetBit(BUS_A2),GetBit(BUS_A3),GetBit(BUS_A4));
+ 105   1        if((GetBit(BUS_A1)!=0)||(GetBit(BUS_A2)!=1)||(GetBit(BUS_A3)!=0)||(GetBit(BUS_A4)!=1)) return 0;
+ 106   1        setb(BUS_B1); clr(BUS_B2); setb(BUS_B3); clr(BUS_B4);
+ 107   1        //printf("%d,%d,%d,%d\n",GetBit(BUS_A1),GetBit(BUS_A2),GetBit(BUS_A3),GetBit(BUS_A4));
+ 108   1        if((GetBit(BUS_A1)!=1)||(GetBit(BUS_A2)!=0)||(GetBit(BUS_A3)!=1)||(GetBit(BUS_A4)!=0)) return 0;
+ 109   1      
+ 110   1        //Check Isolation functionality
+ 111   1        //Drive GAB to HIGH and GBA to LOW
+ 112   1        //Then start A and B whether they are isolated or not
+ 113   1      
+C51 COMPILER V9.60.0.0   IC_TESTS                                                          04/01/2020 00:00:08 PAGE 3   
+
+ 114   1        //Maybe High impedence should be examined as HIGH ! ISOLATION MODE !!!
+ 115   1        //#error NEED TO BE SEARCHED WELL OR EXPERIMENTED FIRST WITH AVO
+ 116   1        setb(BUS_B1); setb(BUS_B2); setb(BUS_B3); setb(BUS_B4); //Set as input
+ 117   1        setb(BUS_GAB); clr(BUS_GBA);
+ 118   1        clr(BUS_A1); clr(BUS_A2); clr(BUS_A3); clr(BUS_A4);
+ 119   1        //printf("%d,%d,%d,%d\n",GetBit(BUS_B1),GetBit(BUS_B2),GetBit(BUS_B3),GetBit(BUS_B4));
+ 120   1        if((GetBit(BUS_B1)!=1)||(GetBit(BUS_B2)!=1)||(GetBit(BUS_B3)!=1)||(GetBit(BUS_B4)!=1)) return 0;
+ 121   1      
+ 122   1        setb(BUS_A1); setb(BUS_A2); setb(BUS_A3); setb(BUS_A4); //Set as input
+ 123   1        setb(BUS_GAB); clr(BUS_GBA);
+ 124   1        clr(BUS_B1); clr(BUS_B2); clr(BUS_B3); clr(BUS_B4);
+ 125   1        //printf("%d,%d,%d,%d\n",GetBit(BUS_A1),GetBit(BUS_A2),GetBit(BUS_A3),GetBit(BUS_A4));
+ 126   1        if((GetBit(BUS_A1)!=1)||(GetBit(BUS_A2)!=1)||(GetBit(BUS_A3)!=1)||(GetBit(BUS_A4)!=1)) return 0;
+ 127   1      
+ 128   1        return 1;
+ 129   1      }
+ 130          
+ 131          //This function may be need some of "Sleep(1);"
+ 132          char Test_74684(void){
+ 133   1        setb(COMP_VCC_684); clr(COMP_GND_684);
+ 134   1        setb(COMP_Pq); setb(COMP_PQ); //Set as input
+ 135   1        clr(COMP_G); //Enable
+ 136   1        //Check P = Q functionality
+ 137   1        //Drive Ps and Qs to ZERO
+ 138   1        //Then check the COMP_PQ pin for LOW and Pq for HIGH
+ 139   1        clr(COMP_P0); clr(COMP_P1); clr(COMP_P2); clr(COMP_P3); clr(COMP_P4); clr(COMP_P5); clr(COMP_P6); clr(COM
+             -P_P7);
+ 140   1        clr(COMP_Q0); clr(COMP_Q1); clr(COMP_Q2); clr(COMP_Q3); clr(COMP_Q4); clr(COMP_Q5); clr(COMP_Q6); clr(COM
+             -P_Q7);
+ 141   1        if((GetBit(COMP_PQ)!=0)) return 0;
+ 142   1      
+ 143   1        //loop on var, 0 < var < 8 , (P or Q) = (1<<var)
+ 144   1        //P > Q then P = Q then P < Q then P = Q
+ 145   1      
+ 146   1        //C = 0
+ 147   1        clr(COMP_P7); clr(COMP_P6); clr(COMP_P5); clr(COMP_P4); clr(COMP_P3); clr(COMP_P2); clr(COMP_P1); setb(CO
+             -MP_P0);
+ 148   1        clr(COMP_Q7); clr(COMP_Q6); clr(COMP_Q5); clr(COMP_Q4); clr(COMP_Q3); clr(COMP_Q2); clr(COMP_Q1); clr(COM
+             -P_Q0);
+ 149   1        if((GetBit(COMP_PQ)!=1)) return 0;
+ 150   1        //C = 0
+ 151   1        clr(COMP_P7); clr(COMP_P6); clr(COMP_P5); clr(COMP_P4); clr(COMP_P3); clr(COMP_P2); clr(COMP_P1); setb(CO
+             -MP_P0);
+ 152   1        clr(COMP_Q7); clr(COMP_Q6); clr(COMP_Q5); clr(COMP_Q4); clr(COMP_Q3); clr(COMP_Q2); clr(COMP_Q1); setb(CO
+             -MP_Q0);
+ 153   1        if((GetBit(COMP_PQ)!=0)) return 0;
+ 154   1        //C = 1
+ 155   1        clr(COMP_P7); clr(COMP_P6); clr(COMP_P5); clr(COMP_P4); clr(COMP_P3); clr(COMP_P2); clr(COMP_P1); setb(CO
+             -MP_P0);
+ 156   1        clr(COMP_Q7); clr(COMP_Q6); clr(COMP_Q5); clr(COMP_Q4); clr(COMP_Q3); clr(COMP_Q2); setb(COMP_Q1); clr(CO
+             -MP_Q0);
+ 157   1        if((GetBit(COMP_PQ)!=1)) return 0;
+ 158   1        //C = 1
+ 159   1        clr(COMP_P7); clr(COMP_P6); clr(COMP_P5); clr(COMP_P4); clr(COMP_P3); clr(COMP_P2); setb(COMP_P1); clr(CO
+             -MP_P0);
+ 160   1        clr(COMP_Q7); clr(COMP_Q6); clr(COMP_Q5); clr(COMP_Q4); clr(COMP_Q3); clr(COMP_Q2); setb(COMP_Q1); clr(CO
+             -MP_Q0);
+ 161   1        if((GetBit(COMP_PQ)!=0)) return 0;
+ 162   1        ////////////////////////////////////////////////////////////////////////
+ 163   1        //C = 2
+ 164   1        clr(COMP_P7); clr(COMP_P6); clr(COMP_P5); clr(COMP_P4); clr(COMP_P3); setb(COMP_P2); clr(COMP_P1); clr(CO
+             -MP_P0);
+C51 COMPILER V9.60.0.0   IC_TESTS                                                          04/01/2020 00:00:08 PAGE 4   
+
+ 165   1        clr(COMP_Q7); clr(COMP_Q6); clr(COMP_Q5); clr(COMP_Q4); clr(COMP_Q3); clr(COMP_Q2); clr(COMP_Q1); clr(COM
+             -P_Q0);
+ 166   1        if((GetBit(COMP_PQ)!=1)) return 0;
+ 167   1        //C = 2
+ 168   1        clr(COMP_P7); clr(COMP_P6); clr(COMP_P5); clr(COMP_P4); clr(COMP_P3); setb(COMP_P2); clr(COMP_P1); clr(CO
+             -MP_P0);
+ 169   1        clr(COMP_Q7); clr(COMP_Q6); clr(COMP_Q5); clr(COMP_Q4); clr(COMP_Q3); setb(COMP_Q2); clr(COMP_Q1); clr(CO
+             -MP_Q0);
+ 170   1        if((GetBit(COMP_PQ)!=0)) return 0;
+ 171   1        //C = 3
+ 172   1        clr(COMP_P7); clr(COMP_P6); clr(COMP_P5); clr(COMP_P4); clr(COMP_P3); setb(COMP_P2); clr(COMP_P1); clr(CO
+             -MP_P0);
+ 173   1        clr(COMP_Q7); clr(COMP_Q6); clr(COMP_Q5); clr(COMP_Q4); setb(COMP_Q3); clr(COMP_Q2); clr(COMP_Q1); clr(CO
+             -MP_Q0);
+ 174   1        if((GetBit(COMP_PQ)!=1)) return 0;
+ 175   1        //C = 3
+ 176   1        clr(COMP_P7); clr(COMP_P6); clr(COMP_P5); clr(COMP_P4); setb(COMP_P3); clr(COMP_P2); clr(COMP_P1); clr(CO
+             -MP_P0);
+ 177   1        clr(COMP_Q7); clr(COMP_Q6); clr(COMP_Q5); clr(COMP_Q4); setb(COMP_Q3); clr(COMP_Q2); clr(COMP_Q1); clr(CO
+             -MP_Q0);
+ 178   1        if((GetBit(COMP_PQ)!=0)) return 0;
+ 179   1        ////////////////////////////////////////////////////////////////////////
+ 180   1        //C = 4
+ 181   1        clr(COMP_P7); clr(COMP_P6); clr(COMP_P5); setb(COMP_P4); clr(COMP_P3); clr(COMP_P2); clr(COMP_P1); clr(CO
+             -MP_P0);
+ 182   1        clr(COMP_Q7); clr(COMP_Q6); clr(COMP_Q5); clr(COMP_Q4); clr(COMP_Q3); clr(COMP_Q2); clr(COMP_Q1); clr(COM
+             -P_Q0);
+ 183   1        if((GetBit(COMP_PQ)!=1)) return 0;
+ 184   1        //C = 4
+ 185   1        clr(COMP_P7); clr(COMP_P6); clr(COMP_P5); setb(COMP_P4); clr(COMP_P3); clr(COMP_P2); clr(COMP_P1); clr(CO
+             -MP_P0);
+ 186   1        clr(COMP_Q7); clr(COMP_Q6); clr(COMP_Q5); setb(COMP_Q4); clr(COMP_Q3); clr(COMP_Q2); clr(COMP_Q1); clr(CO
+             -MP_Q0);
+ 187   1        if((GetBit(COMP_PQ)!=0)) return 0;
+ 188   1        //C = 5
+ 189   1        clr(COMP_P7); clr(COMP_P6); clr(COMP_P5); setb(COMP_P4); clr(COMP_P3); clr(COMP_P2); clr(COMP_P1); clr(CO
+             -MP_P0);
+ 190   1        clr(COMP_Q7); clr(COMP_Q6); setb(COMP_Q5); clr(COMP_Q4); clr(COMP_Q3); clr(COMP_Q2); clr(COMP_Q1); clr(CO
+             -MP_Q0);
+ 191   1        if((GetBit(COMP_PQ)!=1)) return 0;
+ 192   1        //C = 5
+ 193   1        clr(COMP_P7); clr(COMP_P6); setb(COMP_P5); clr(COMP_P4); clr(COMP_P3); clr(COMP_P2); clr(COMP_P1); clr(CO
+             -MP_P0);
+ 194   1        clr(COMP_Q7); clr(COMP_Q6); setb(COMP_Q5); clr(COMP_Q4); clr(COMP_Q3); clr(COMP_Q2); clr(COMP_Q1); clr(CO
+             -MP_Q0);
+ 195   1        if((GetBit(COMP_PQ)!=0)) return 0;
+ 196   1        ////////////////////////////////////////////////////////////////////////
+ 197   1        //C = 6
+ 198   1        clr(COMP_P7); setb(COMP_P6); clr(COMP_P5); clr(COMP_P4); clr(COMP_P3); clr(COMP_P2); clr(COMP_P1); clr(CO
+             -MP_P0);
+ 199   1        clr(COMP_Q7); clr(COMP_Q6); clr(COMP_Q5); clr(COMP_Q4); clr(COMP_Q3); clr(COMP_Q2); clr(COMP_Q1); clr(COM
+             -P_Q0);
+ 200   1        if((GetBit(COMP_PQ)!=1)) return 0;
+ 201   1        //C = 6
+ 202   1        clr(COMP_P7); setb(COMP_P6); clr(COMP_P5); clr(COMP_P4); clr(COMP_P3); clr(COMP_P2); clr(COMP_P1); clr(CO
+             -MP_P0);
+ 203   1        clr(COMP_Q7); setb(COMP_Q6); clr(COMP_Q5); clr(COMP_Q4); clr(COMP_Q3); clr(COMP_Q2); clr(COMP_Q1); clr(CO
+             -MP_Q0);
+ 204   1        if((GetBit(COMP_PQ)!=0)) return 0;
+ 205   1        //C = 7
+ 206   1        clr(COMP_P7); setb(COMP_P6); clr(COMP_P5); clr(COMP_P4); clr(COMP_P3); clr(COMP_P2); clr(COMP_P1); clr(CO
+             -MP_P0);
+C51 COMPILER V9.60.0.0   IC_TESTS                                                          04/01/2020 00:00:08 PAGE 5   
+
+ 207   1        setb(COMP_Q7); clr(COMP_Q6); clr(COMP_Q5); clr(COMP_Q4); clr(COMP_Q3); clr(COMP_Q2); clr(COMP_Q1); clr(CO
+             -MP_Q0);
+ 208   1        if((GetBit(COMP_PQ)!=1)) return 0;
+ 209   1        //C = 7
+ 210   1        setb(COMP_P7); clr(COMP_P6); clr(COMP_P5); clr(COMP_P4); clr(COMP_P3); clr(COMP_P2); clr(COMP_P1); clr(CO
+             -MP_P0);
+ 211   1        setb(COMP_Q7); clr(COMP_Q6); clr(COMP_Q5); clr(COMP_Q4); clr(COMP_Q3); clr(COMP_Q2); clr(COMP_Q1); clr(CO
+             -MP_Q0);
+ 212   1        if((GetBit(COMP_PQ)!=0)) return 0;
+ 213   1        ////////////////////////////////////////////////////////////////////////
+ 214   1      
+ 215   1        return 1;
+ 216   1      }
+ 217          
+ 218          char Test_4077(void){
+ 219   1        setb(XNOR_VCC_77); clr(XNOR_GND_77);
+ 220   1        setb(XNOR_J); setb(XNOR_K); setb(XNOR_L); setb(XNOR_M); //Set as input
+ 221   1        //Test the IC with the 4 possiblities to all gates
+ 222   1        clr(XNOR_A); clr(XNOR_B); clr(XNOR_C); clr(XNOR_D); clr(XNOR_E); clr(XNOR_F); clr(XNOR_G); clr(XNOR_H);
+ 223   1        if((GetBit(XNOR_J)&GetBit(XNOR_K)&GetBit(XNOR_L)&GetBit(XNOR_M)) == 0) return 0;
+ 224   1        setb(XNOR_A); clr(XNOR_B); setb(XNOR_C); clr(XNOR_D); setb(XNOR_E); clr(XNOR_F); setb(XNOR_G); clr(XNOR_H
+             -);
+ 225   1        if((GetBit(XNOR_J)|GetBit(XNOR_K)|GetBit(XNOR_L)|GetBit(XNOR_M)) == 1) return 0;
+ 226   1        clr(XNOR_A); setb(XNOR_B); clr(XNOR_C); setb(XNOR_D); clr(XNOR_E); setb(XNOR_F); clr(XNOR_G); setb(XNOR_H
+             -);
+ 227   1        if((GetBit(XNOR_J)|GetBit(XNOR_K)|GetBit(XNOR_L)|GetBit(XNOR_M)) == 1) return 0;
+ 228   1        setb(XNOR_A); setb(XNOR_B); setb(XNOR_C); setb(XNOR_D); setb(XNOR_E); setb(XNOR_F); setb(XNOR_G); setb(XN
+             -OR_H);
+ 229   1        if((GetBit(XNOR_J)&GetBit(XNOR_K)&GetBit(XNOR_L)&GetBit(XNOR_M)) == 0) return 0;
+ 230   1      
+ 231   1        return 1;
+ 232   1      }
+ 233          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1311    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

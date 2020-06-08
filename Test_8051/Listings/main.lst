@@ -1,0 +1,97 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              04/01/2020 00:00:08 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          
+   2          #include <reg51.h>
+   3          #include "IC_DATA.h"
+   4          
+   5          //Timer 0 for Delay(Sleep)
+   6          //Timer 1 for UART baud rate(4800)
+   7          //tick = 1 / 1.8432 = 0.5425347us
+   8          
+   9          //22.1184/12 = 1.8432MHz
+  10          //1.8432 / 32 = 57.6KHz
+  11          //57.6 / 12 = 4800
+  12          //-12 -> 0xF4
+  13          
+  14          //#error 74243 first 2 cases flipped for simulation (clr then set not set then clr)
+  15          //#error 74684 as been altered to 74688 for simulation (Pq should be recovered and remove G)
+  16          
+  17          void Sleep(int ms);
+  18          void UART_SendString(char* str);
+  19          
+  20          void main(void){
+  21   1        char i = 0;
+  22   1        char ic_found = 0;
+  23   1        unsigned char* ICs[NUMBER_OF_ICS] = {"7402","74112","74243","74684","4077"};
+  24   1        char (*ptr[NUMBER_OF_ICS])(void) = {Test_7402, Test_74112, Test_74243, Test_74684, Test_4077};
+  25   1        
+  26   1        TMOD=0x20; //use Timer 1, mode 2
+  27   1        TH1=0xF4; //4800 baud rate
+  28   1        SCON=0x50;
+  29   1        TR1=1; //start timer
+  30   1        
+  31   1        Sleep(1000);
+  32   1        while (1) {
+  33   2          ic_found = 0;
+  34   2          for(i = 0; i < NUMBER_OF_ICS; i++){
+  35   3            if(ptr[i]()){
+  36   4              ic_found = 1;
+  37   4              UART_SendString("IC "); UART_SendString(ICs[i]); UART_SendString(" is recognised :)\n\r");
+  38   4              break;
+  39   4            }
+  40   3          }
+  41   2          if(ic_found == 0){
+  42   3            UART_SendString("No IC has been recognised :(\n\r");
+  43   3          }
+  44   2          Sleep(1000);
+  45   2          
+  46   2        }
+  47   1      }
+  48          
+  49          void Sleep(int ms){
+  50   1        unsigned int i = 0;
+  51   1        TMOD |= 0x01;           // Timer0 mode1
+  52   1        
+  53   1        for(i = 0; i < ms; i++){
+  54   2          TH0=0xF8;              //initial value for 1ms
+C51 COMPILER V9.60.0.0   MAIN                                                              04/01/2020 00:00:08 PAGE 2   
+
+  55   2          TL0=0xCB;
+  56   2          TR0 = 1;               // timer0 start
+  57   2          while (TF0 == 0);      // check overflow condition
+  58   2          TR0 = 0;               // Stop Timer
+  59   2          TF0 = 0;               // Clear flag
+  60   2        }
+  61   1      }
+  62          
+  63          void UART_SendString(char* str){
+  64   1        short int i = 0;
+  65   1        while(str[i] != 0){
+  66   2          TI=0;
+  67   2          SBUF = str[i]; //place value in buffer
+  68   2          while (TI==0); //wait until transmitted
+  69   2          i++;
+  70   2        }
+  71   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    257    ----
+   CONSTANT SIZE    =    113    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      35
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
